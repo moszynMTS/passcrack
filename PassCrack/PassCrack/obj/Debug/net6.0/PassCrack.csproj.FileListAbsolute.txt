@@ -1,0 +1,15 @@
+D:\studia\magisterka\sem1\lamaczHasel\PassCrack\PassCrack\bin\Debug\net6.0\PassCrack.exe
+D:\studia\magisterka\sem1\lamaczHasel\PassCrack\PassCrack\bin\Debug\net6.0\PassCrack.deps.json
+D:\studia\magisterka\sem1\lamaczHasel\PassCrack\PassCrack\bin\Debug\net6.0\PassCrack.runtimeconfig.json
+D:\studia\magisterka\sem1\lamaczHasel\PassCrack\PassCrack\bin\Debug\net6.0\PassCrack.dll
+D:\studia\magisterka\sem1\lamaczHasel\PassCrack\PassCrack\bin\Debug\net6.0\PassCrack.pdb
+D:\studia\magisterka\sem1\lamaczHasel\PassCrack\PassCrack\obj\Debug\net6.0\PassCrack.csproj.AssemblyReference.cache
+D:\studia\magisterka\sem1\lamaczHasel\PassCrack\PassCrack\obj\Debug\net6.0\PassCrack.GeneratedMSBuildEditorConfig.editorconfig
+D:\studia\magisterka\sem1\lamaczHasel\PassCrack\PassCrack\obj\Debug\net6.0\PassCrack.AssemblyInfoInputs.cache
+D:\studia\magisterka\sem1\lamaczHasel\PassCrack\PassCrack\obj\Debug\net6.0\PassCrack.AssemblyInfo.cs
+D:\studia\magisterka\sem1\lamaczHasel\PassCrack\PassCrack\obj\Debug\net6.0\PassCrack.csproj.CoreCompileInputs.cache
+D:\studia\magisterka\sem1\lamaczHasel\PassCrack\PassCrack\obj\Debug\net6.0\PassCrack.dll
+D:\studia\magisterka\sem1\lamaczHasel\PassCrack\PassCrack\obj\Debug\net6.0\refint\PassCrack.dll
+D:\studia\magisterka\sem1\lamaczHasel\PassCrack\PassCrack\obj\Debug\net6.0\PassCrack.pdb
+D:\studia\magisterka\sem1\lamaczHasel\PassCrack\PassCrack\obj\Debug\net6.0\PassCrack.genruntimeconfig.cache
+D:\studia\magisterka\sem1\lamaczHasel\PassCrack\PassCrack\obj\Debug\net6.0\ref\PassCrack.dll
