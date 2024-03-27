@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "IQWXXpnCiGB99jXdkbPMkdC5EXyN2c5BFZMEGiIrM9gDREcFoYccVOOmj/sYWkJxq77KmNXmoYzHWB54SYNgog==",
+  "dgSpecHash": "ZRlNkAp2XtMCov/dMJIFWKqk68fn3nXbj8x2LsDdjR2xY7PN93EWqXgxyvvbDETEqfTHEAMxTNv6tp8CeyBohw==",
   "success": true,
-  "projectFilePath": "D:\\studia\\magisterka\\sem1\\lamaczHasel\\PassCrack\\PassCrack\\PassCrack.csproj",
+  "projectFilePath": "D:\\studia\\magisterka\\sem1\\passCrack\\PassCrack\\PassCrack\\PassCrack.Host.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

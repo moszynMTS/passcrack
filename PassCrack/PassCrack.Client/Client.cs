@@ -1,0 +1,37 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PassCrack.Client
+{
+    internal class Client
+    {
+
+        public Client() { }
+
+        public void Start()
+        {
+            try
+            {
+                // Połącz się z serwerem na porcie 5000 na localhost
+                TcpClient client = new TcpClient("127.0.0.1", 5000);
+                Console.WriteLine("Połączono z serwerem.");
+
+                // Utwórz strumienie do komunikacji z serwerem
+                ConnectionHandler connectionHandler = new ConnectionHandler(client);
+                Thread clientThread = new Thread(connectionHandler.HandleClient);
+                clientThread.Start();
+                // Zamknij połączenie
+                clientThread.Join();
+                Console.WriteLine("Zakończono połączenie z serwerem.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Błąd klienta: " + ex.Message);
+            }
+        }
+    }
+}

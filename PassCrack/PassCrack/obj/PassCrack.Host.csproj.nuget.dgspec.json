@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "D:\\studia\\magisterka\\sem1\\passCrack\\PassCrack\\PassCrack\\PassCrack.csproj": {}
+    "D:\\studia\\magisterka\\sem1\\passCrack\\PassCrack\\PassCrack\\PassCrack.Host.csproj": {}
   },
   "projects": {
-    "D:\\studia\\magisterka\\sem1\\passCrack\\PassCrack\\PassCrack\\PassCrack.csproj": {
+    "D:\\studia\\magisterka\\sem1\\passCrack\\PassCrack\\PassCrack\\PassCrack.Host.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\studia\\magisterka\\sem1\\passCrack\\PassCrack\\PassCrack\\PassCrack.csproj",
-        "projectName": "PassCrack",
-        "projectPath": "D:\\studia\\magisterka\\sem1\\passCrack\\PassCrack\\PassCrack\\PassCrack.csproj",
+        "projectUniqueName": "D:\\studia\\magisterka\\sem1\\passCrack\\PassCrack\\PassCrack\\PassCrack.Host.csproj",
+        "projectName": "PassCrack.Host",
+        "projectPath": "D:\\studia\\magisterka\\sem1\\passCrack\\PassCrack\\PassCrack\\PassCrack.Host.csproj",
         "packagesPath": "C:\\Users\\48794\\.nuget\\packages\\",
         "outputPath": "D:\\studia\\magisterka\\sem1\\passCrack\\PassCrack\\PassCrack\\obj\\",
         "projectStyle": "PackageReference",

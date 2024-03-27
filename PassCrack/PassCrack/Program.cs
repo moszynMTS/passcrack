@@ -1,7 +1,11 @@
-﻿using System;
+﻿using PassCrack.Host;
+using System;
 
 class Program
 {
+    public int ClientsCount { get; private set; }
+    public int Method { get; private set; }
+
     static void Logo()
     {
         Console.WriteLine("*        ____  ___   __________ ________________  ___   ________ __");
@@ -11,59 +15,79 @@ class Program
         Console.WriteLine("*    /_/   /_/  |_/____/____/\\____/\\____/_/ |_/_/  |_\\____/_/ |_|  ");
         Console.WriteLine("");
     }
-    public static void Main()
+    public bool Config()
     {
-        int ClientsCount = 0;
-        int Method = 0;
+        Console.WriteLine("Wpisz ilość klientów.");
+        string input = Console.ReadLine();
+        if (input.ToLower() == "exit")
+            return true;
+        if (!int.TryParse(input, out int result))
+        {
+            Console.WriteLine("Nie podano liczby.");
+            return false;
+        }
+        else
+        {
+            ClientsCount = result;
+        }
+        Console.WriteLine("Ilość klientów {0}.", ClientsCount);
+        Console.WriteLine("1 - metoda słownikowa.");
+        Console.WriteLine("2 - metoda brute force.");
+        Console.WriteLine("Wpisz nr metody:");
+        input = Console.ReadLine();
+        if (input.ToLower() == "exit")
+            return true;
+        if (!int.TryParse(input, out result))
+        {
+            Console.WriteLine("Nie podano liczby.");
+            return false;
+        }
+        if (result != 1 && result != 2)
+        {
+            Console.WriteLine("Nie podano nr metody.");
+            return false;
+        }
+        Method = result;
+        Console.WriteLine("Metoda {0}.", Method);
+        return true;
+    }
+    public bool MainLoop()
+    {
+        string input;
+        bool config = true;
+        bool start = true;
+
+        Console.WriteLine("Wpisz 'exit', aby wyjść z programu.");
+        Logo();
         while (true)
         {
-
-            Logo();
-            Console.WriteLine("Wpisz 'exit', aby wyjść z programu.");
-            Console.WriteLine("Wpisz ilość klientów.");
-            string input = Console.ReadLine();
-            if (input.ToLower() == "exit")
-                break;
-            if (!int.TryParse(input, out int result))
+            if (config)
             {
-                Console.WriteLine("Nie podano liczby.");
-                break;
+                if (!Config())
+                    return false;
+                else
+                    config = false;
             }
-            else
-            {
-                ClientsCount = result;
-            }
-            Console.WriteLine("Ilość klientów {0}.", ClientsCount);
-            Console.WriteLine("1 - metoda słownikowa.");
-            Console.WriteLine("2 - metoda brute force.");
-            Console.WriteLine("Wpisz nr metody:");
+/*            Console.WriteLine("Wpisz tekst.");
             input = Console.ReadLine();
             if (input.ToLower() == "exit")
-                break;
-            if (!int.TryParse(input, out result))
-            {
-                Console.WriteLine("Nie podano liczby.");
-                break;
-            }
-            else
-            {
-                if (result!=1 || result!=2)
-                {
-                    Console.WriteLine("Nie podano nr metody.");
-                    break;
-                }
-                Method = result;
-            }
-            Console.WriteLine("Metoda {0}.", Method);
-            Console.WriteLine("Wpisz tekst.");
-            input = Console.ReadLine();
-            if (input.ToLower() == "exit")
-                break;
+                return true;
             else
             {
                 Console.Clear(); // Czyszczenie konsoli
-                Console.WriteLine("Wprowadzony tekst: " + input);
+                Console.WriteLine("Wprowadzony tekst: " + input);*/
+            if (start)
+            {
+                start = false;
+                Server server = new Server(ClientsCount);
+                server.Start();
             }
+            //}
         }
+    }
+    public static void Main()
+    {
+        Program program = new Program();
+        program.MainLoop();
     }
 }

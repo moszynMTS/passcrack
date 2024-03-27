@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PassCrack", "PassCrack\PassCrack.csproj", "{CD3D04E6-F64C-49D5-95EB-F36C050A561F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PassCrack.Host", "PassCrack\PassCrack.Host.csproj", "{CD3D04E6-F64C-49D5-95EB-F36C050A561F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PassCrack.Client", "PassCrack.Client\PassCrack.Client.csproj", "{82037D1A-6741-4621-AC05-76F8518A59CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{CD3D04E6-F64C-49D5-95EB-F36C050A561F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD3D04E6-F64C-49D5-95EB-F36C050A561F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD3D04E6-F64C-49D5-95EB-F36C050A561F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82037D1A-6741-4621-AC05-76F8518A59CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82037D1A-6741-4621-AC05-76F8518A59CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82037D1A-6741-4621-AC05-76F8518A59CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82037D1A-6741-4621-AC05-76F8518A59CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
