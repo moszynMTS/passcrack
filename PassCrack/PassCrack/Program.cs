@@ -5,7 +5,6 @@ class Program
 {
     public int ClientsCount { get; private set; }
     public int Method { get; private set; }
-
     static void Logo()
     {
         Console.WriteLine("*        ____  ___   __________ ________________  ___   ________ __");
@@ -56,19 +55,20 @@ class Program
         string input;
         bool config = true;
         bool start = true;
+        bool end = false;
 
         Console.WriteLine("Wpisz 'exit', aby wyjść z programu.");
         Logo();
-        while (true)
+        while (!end)
         {
-            if (config)
+            if (!config)
             {
                 if (!Config())
                     return false;
                 else
                     config = false;
             }
-/*            Console.WriteLine("Wpisz tekst.");
+            /*Console.WriteLine("Wpisz tekst.");
             input = Console.ReadLine();
             if (input.ToLower() == "exit")
                 return true;
@@ -81,9 +81,11 @@ class Program
                 start = false;
                 Server server = new Server(ClientsCount);
                 server.Start();
+                end = true;
             }
             //}
         }
+        return true;
     }
     public static void Main()
     {
