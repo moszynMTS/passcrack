@@ -11,7 +11,7 @@ namespace PassCrack.Client
     {
         private NetworkStream Stream;
         private TcpClient Client;
-        private string message;
+        private string message = "";
         public ConnectionHandler(TcpClient client)
         {
             this.Client = client;

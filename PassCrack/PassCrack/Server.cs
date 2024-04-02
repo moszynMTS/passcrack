@@ -12,63 +12,15 @@ namespace PassCrack.Host
     public class Server
     {
         public int ClientCount;
-        public string Keys = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,./;'[]\\-=<>?:\"{}|_+!@#$%^&*() ";
-        public List<string> Passwords = new List<string>();
         public Server(int _ClientCount) 
         {
             ClientCount = _ClientCount;
         }
 
-        public string DecToString(ulong number)
-        {
-            string result = "";
-            if (number == 0)
-                return "a";
-            while (number > 0)
-            {
-                int remainder = (int)(number % (ulong)Keys.Length);
-                result = Keys[remainder] + result;
-                number /= (ulong)Keys.Length;
-            }
-            return result;
-        }
-
-        static string CalculateMD5Hash(string input)
-        {
-            using (MD5 md5 = MD5.Create())
-            {
-                // Konwertuj input na tablicę bajtów i oblicz skrót MD5
-                byte[] inputBytes = Encoding.UTF8.GetBytes(input);
-                byte[] hashBytes = md5.ComputeHash(inputBytes);
-
-                // Konwertuj tablicę bajtów na ciąg szesnastkowy
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < hashBytes.Length; i++)
-                {
-                    sb.Append(hashBytes[i].ToString("x2"));
-                }
-                return sb.ToString();
-            }
-        }
-        public void BruteForce(ulong from, ulong to)
-        {
-            ulong i = from;
-            while (i < to)
-            {
-                var tmp = DecToString(i);
-                var hash = CalculateMD5Hash(tmp);
-                if(hash == "6cd3556deb0da54bca060b4c39479839") Console.WriteLine("x");
-                /* for (int j = 0; j < Passwords.Count; j++)
-                 {
-                 }*/
-                i++;
-            }
-        }
         public bool Start()
         {
             //BruteForce(0,18446744073709551615);
             var time = DateTime.Now;
-            BruteForce(0,20000000);
             Console.WriteLine((DateTime.Now - time).TotalSeconds);
             return true;
             try
