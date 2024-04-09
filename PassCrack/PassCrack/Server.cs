@@ -1,28 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Security.Cryptography;
 
 namespace PassCrack.Host
 {
     public class Server
     {
         public int ClientCount;
-        public Server(int _ClientCount) 
+        public int Method;
+        public Server(int _ClientCount, int _Method) 
         {
             ClientCount = _ClientCount;
+            Method = _Method;
         }
 
-        public bool Start()
+        public bool Start(List<string> passwords)
         {
             //BruteForce(0,18446744073709551615);
-            var time = DateTime.Now;
+           /* var time = DateTime.Now;
             Console.WriteLine((DateTime.Now - time).TotalSeconds);
-            return true;
+            return true;*/
             try
             {
                 TcpListener listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 5000);
@@ -37,7 +33,7 @@ namespace PassCrack.Host
                     Console.WriteLine("Klient połączony!");
 
                     // Tworzenie nowego wątku do obsługi klienta
-                    ConnectionHandler connectionHandler = new ConnectionHandler(client, i);
+                    ConnectionHandler connectionHandler = new ConnectionHandler(client, i, passwords);
                     Thread clientThread = new Thread(connectionHandler.HandleClient);
                     clientThreads.Add(clientThread);
                     clientThread.Start();

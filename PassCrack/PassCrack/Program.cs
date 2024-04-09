@@ -1,5 +1,4 @@
 ﻿using PassCrack.Host;
-using System;
 
 class Program
 {
@@ -68,22 +67,20 @@ class Program
                 else
                     config = false;
             }
-            /*Console.WriteLine("Wpisz tekst.");
-            input = Console.ReadLine();
-            if (input.ToLower() == "exit")
-                return true;
-            else
-            {
-                Console.Clear(); // Czyszczenie konsoli
-                Console.WriteLine("Wprowadzony tekst: " + input);*/
             if (start)
             {
                 start = false;
-                Server server = new Server(ClientsCount);
-                server.Start();
+                Server server = new Server(ClientsCount, Method);
+                var passwords = new List<string>()
+                {
+                    "test",
+                    "test2",
+                    "Ala",
+                    "lalat",
+                };
+                server.Start(passwords);
                 end = true;
             }
-            //}
         }
         return true;
     }

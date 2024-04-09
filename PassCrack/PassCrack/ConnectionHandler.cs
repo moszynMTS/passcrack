@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace PassCrack.Host
 {
@@ -11,10 +7,12 @@ namespace PassCrack.Host
     {
         private TcpClient Client;
         private readonly int ClientNr;
-        public ConnectionHandler(TcpClient client, int clientNr)
+        private readonly List<string> Passwords;
+        public ConnectionHandler(TcpClient client, int clientNr, List<string> passwords)
         {
             this.Client = client;
             this.ClientNr = clientNr;
+            this.Passwords = passwords;
         }
         public void HandleClient()
         {
@@ -22,13 +20,22 @@ namespace PassCrack.Host
             {
                 Console.WriteLine("Obsługa klienta {0} rozpoczęta.", ClientNr);
 
-                for (int i = 0; i < 10; i++)
+                SendMessage(string.Join(";", Passwords));
+                bool found = false;
+                while (!found)
                 {
-                    string message = (i + 1).ToString();
-                    SendMessage(message);
-                    Console.WriteLine("Obsługa klienta {0} {1}.", ClientNr, ReceiveMessage(Client.GetStream()));
+                    int number = 1000;// tutaj jakos trzeba synchronizowac wszystkie wątki tak, aby ten number był zawsze ostatni sprawdzany
+                    int size = 20000;
+                    //globalNr += size;
+                    SendMessage($"{number},{size}");
+                    var received = ReceiveMessage(Client.GetStream());
+                    if(received == "found")
+                    {
+                        found = true;
+                        Console.WriteLine("Obsługa klienta {0} {1}.", ClientNr, "znaleziono haslo");
+                    } else
+                        Console.WriteLine("Obsługa klienta {0} {1}.", ClientNr, "wysylanie kolejnej paczki");
                 }
-
                 Console.WriteLine("Obsługa klienta {0} zakończona.", ClientNr);
             }
             catch (Exception ex)
@@ -46,14 +53,16 @@ namespace PassCrack.Host
             NetworkStream stream = Client.GetStream();
             byte[] data = Encoding.ASCII.GetBytes(message);
             stream.Write(data, 0, data.Length);
-            Console.WriteLine("Wysłano: " + message);
+            Console.WriteLine("Obsługa klienta {0} wysłano {1}", ClientNr, message);
         }
 
-        static string ReceiveMessage(NetworkStream stream)
+        private string ReceiveMessage(NetworkStream stream)
         {
             byte[] buffer = new byte[1024];
             int bytesRead = stream.Read(buffer, 0, buffer.Length);
-            return Encoding.ASCII.GetString(buffer, 0, bytesRead);
+            var result = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+            Console.WriteLine("Obsługa klienta {0} odebrano {1}.", ClientNr, result);
+            return result;
         }
     }
 }

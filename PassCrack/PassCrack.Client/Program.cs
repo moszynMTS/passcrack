@@ -1,5 +1,4 @@
 ﻿using PassCrack.Client;
-using System;
 
 class Program
 {
