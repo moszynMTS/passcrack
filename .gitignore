@@ -1,5 +1,6 @@
-PassCrack/.vs/
-PassCrack/PassCrack/bin/
+PassCrack/.vs
+PassCrack/PassCrack/bin/Debug/net6.0
 PassCrack/PassCrack/obj/
 PassCrack/PassCrack.Client/obj/
 *.zip
+*.dll
