@@ -48,7 +48,9 @@ namespace PassCrack.Host
                 {
                     lock(sonThread)
                     {
-                        number += size;// tutaj jakos trzeba synchronizowac wszystkie wątki tak, aby ten number był zawsze ostatni sprawdzany
+                        number = GlobalData.GetNumber();
+                        GlobalData.SetNumber(number + size);
+                        //number += size;// tutaj jakos trzeba synchronizowac wszystkie wątki tak, aby ten number był zawsze ostatni sprawdzany
                     }
                     //globalNr += size;
                     SendMessage($"{number};{size};");
