@@ -15,6 +15,8 @@ class Program
     {
         Client client = new Client();
         Logo();
+        Console.WriteLine("Zacznij (enter).");
+        Console.ReadLine();
         client.Start();
     }
     public static void Main()

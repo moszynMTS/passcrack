@@ -10,19 +10,28 @@
         public void SetNewSize(ulong from, ulong to)
         {
             From = from;
-            To = to;
+            To = from+to;
         }
-        public override void Resolve()
+        public override bool Resolve()
         {
+            Console.WriteLine("Szukam od {0} przez {1}", From, To);
             ulong i = From;
+            var tmp = "";
             while (i < To)
             {
-                var tmp = DecToString(i);
+                tmp = DecToString(i);
+                if (tmp.ToString() == "Ala")
+                    Console.Write("Sprawdzam {0};", tmp);
                 var hash = CalculateMD5Hash(tmp);
                 if (CheckPasswords(hash))
+                {
                     Console.WriteLine("Znaleziono {0} : {1}", tmp, hash);
+                    return true;
+                }
                 i++;
             }
+            Console.WriteLine("Ostatni {0}", tmp);
+            return false;
         }
     }
 }

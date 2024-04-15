@@ -71,7 +71,7 @@ namespace PassCrack.Client
             }
         }
 
-        public abstract void Resolve();
+        public abstract bool Resolve();
 
     }
 }

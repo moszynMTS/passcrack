@@ -8,41 +8,101 @@ namespace PassCrack.Client
         private NetworkStream Stream;
         private TcpClient Client;
         private string message = "";
+        private List<string> Passwords;
+        private int Method;
+        private int HashType;
+        private ulong From;
+        private ulong To;
+
         public ConnectionHandler(TcpClient client)
         {
-            this.Client = client;
-            this.Stream = client.GetStream();
+            Client = client;
+            Stream = client.GetStream();
         }
         public void HandleClient()
         {
-                for (int i = 0; i < 10; i++)
-                {
-                    // Oczekiwanie na odpowiedź
-                    string response = ReceiveMessage(Stream);
-                    Console.WriteLine("Odebrano odpowiedź: " + response);
-                    
-                    if (message == "10")
-                    {
-                        Stream.Close();
-                        Client.Close();
-                        Console.WriteLine("Zakończono połączenie z serwerem.");
-                        return;
-                    }
-                    string messageToSend = "Wiadomość " + (i + 1);
-                    SendMessage(Stream, messageToSend);
-                }
+            InitConnection();
+            var found = false;
+            for (int i =0; i<100;i++)
+            {
+                found=ReceiveAndSolvePackage();
+            }
+            Stream.Close();
+            Client.Close();
         }
-        static void SendMessage(NetworkStream stream, string message)
+
+        void InitConnection()
+        {
+            ReceivePasswords();
+            ReceiveMethod();
+        }
+        bool ReceiveAndSolvePackage()
+        {
+            var mess = "";
+            var found = false;
+            switch (Method)
+            {
+                case 1: //slownik
+                    {
+                        string response = ReceiveMessage();
+                        var tmp = response.Split(";").ToList();
+                        var solver = new DictionaryMethodHandler(tmp);
+                        found=solver.Resolve();
+                        break;
+                    }
+                case 2://2 or bruteforce
+                    {
+                        string response = ReceiveMessage();
+                        var tmp = response.Split(";").ToList();
+                        var solver = new BruteForceHandler(ulong.Parse(tmp[0]), ulong.Parse(tmp[1]));
+                        found= solver.Resolve();
+                        break;
+                    }
+                default:
+                    Console.WriteLine("Blad metody");
+                    break;
+            }
+            SendOkMessage();
+            return found;
+        }
+        void ReceiveMethod()
+        {
+            string response = ReceiveMessage();
+            Method = int.Parse(response);
+            SendOkMessage();
+        }
+        void ReceivePasswords()
+        {
+            string response = ReceiveMessage();
+            Passwords = response.Split(";").ToList();
+            var mess = Passwords.Count() + " haseł.";
+            SendMessage(mess);
+        }
+        void SendMessage(string message)
         {
             byte[] data = Encoding.ASCII.GetBytes(message);
-            stream.Write(data, 0, data.Length);
+            Stream.Write(data, 0, data.Length);
             Console.WriteLine("Wysłano: " + message);
         }
 
-        static string ReceiveMessage(NetworkStream stream)
+        void SendOkMessage()
+        {
+            byte[] data = Encoding.ASCII.GetBytes("Ok");
+            Stream.Write(data, 0, data.Length);
+            Console.WriteLine("Wysłano: " + message);
+        }
+
+        void SendErrorMessage()
+        {
+            byte[] data = Encoding.ASCII.GetBytes("Error");
+            Stream.Write(data, 0, data.Length);
+            Console.WriteLine("Wysłano: " + message);
+        }
+
+        string ReceiveMessage()
         {
             byte[] buffer = new byte[1024];
-            int bytesRead = stream.Read(buffer, 0, buffer.Length);
+            int bytesRead = Stream.Read(buffer, 0, buffer.Length);
             return Encoding.ASCII.GetString(buffer, 0, bytesRead);
         }
     }

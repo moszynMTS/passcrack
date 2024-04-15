@@ -3,15 +3,15 @@
     public class DictionaryMethodHandler : PassCracker
     {
         public List<string> Words = new List<string>();
-        public DictionaryMethodHandler(string words)
+        public DictionaryMethodHandler(List<string> words)
         {
             SetNewSize(words);
         }
-        public void SetNewSize(string words)
+        public void SetNewSize(List<string> words)
         {
-            Words = words.Split(' ').ToList();
+            Words = words;
         }
-        public override void Resolve()
+        public override bool Resolve()
         {
             foreach (string word in Words)
             {
@@ -23,9 +23,13 @@
                     var tmp = DecToString(i);
                     hash = CalculateMD5Hash(word+tmp);
                     if (CheckPasswords(hash))
-                        Console.WriteLine("Znaleziono {0} : {1}", word, hash);
+                    {
+                        Console.WriteLine("Znaleziono {0} : {1}", tmp, hash);
+                        return true;
+                    }
                 }
             }
+            return false;
         }
     }
 }

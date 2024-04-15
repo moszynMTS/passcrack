@@ -4,6 +4,7 @@ class Program
 {
     public int ClientsCount { get; private set; }
     public int Method { get; private set; }
+
     static void Logo()
     {
         Console.WriteLine("*        ____  ___   __________ ________________  ___   ________ __");
@@ -60,7 +61,7 @@ class Program
         Logo();
         while (!end)
         {
-            if (!config)
+            if (config)
             {
                 if (!Config())
                     return false;
@@ -75,7 +76,7 @@ class Program
                 {
                     "test",
                     "test2",
-                    "Ala",
+                    "ala",
                     "lalat",
                 };
                 server.Start(passwords);
