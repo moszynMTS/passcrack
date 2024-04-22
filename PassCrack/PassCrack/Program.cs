@@ -93,7 +93,7 @@ class Program
                 var passwords = new List<string>()
                 {
                     "test",
-                     "test2",
+                    "test2",
                     "ala",
                     "lalat",
                 };

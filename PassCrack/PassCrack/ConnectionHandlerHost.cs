@@ -16,18 +16,21 @@ namespace PassCrack.Host
         {
             Client = client;
             ClientNr = clientNr;
-            Passwords = HashWord(passwords);
+            Passwords = HashPasswords(passwords);
             Method = method;
             Hash = hash;
             WordList = wordList; //for slownik
         }
 
-        private List<string> HashWord(List<string> passwords) 
+        private List<string> HashPasswords(List<string> passwords) 
         {
             var result = new List<string>();
             foreach(string password in passwords)
             {
-                result.Add(CalculateMD5Hash(password));
+                if(Hash == 1)
+                    result.Add(CalculateMD5Hash(password));
+                else
+                    result.Add(CalculateSHA1Hash(password));
             }
             return result;
         }
@@ -96,7 +99,6 @@ namespace PassCrack.Host
                 return (false, result);
             return (true,result);
         }
-
         public static string CalculateSHA1Hash(string input)
         {
             using (SHA1 sha1 = SHA1.Create())
@@ -114,7 +116,6 @@ namespace PassCrack.Host
                 return sb.ToString();
             }
         }
-
         public static string CalculateMD5Hash(string input)
         {
             using (MD5 md5 = MD5.Create())
