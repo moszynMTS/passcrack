@@ -3,18 +3,18 @@ using System.Text;
 
 namespace PassCrack.Client
 {
-    public class ConnectionHandler
+    public class ConnectionHandlerClient
     {
         private NetworkStream Stream;
         private TcpClient Client;
         private string message = "";
         private List<string> Passwords;
         private int Method;
-        private int HashType;
+        private int Hash;
         private ulong From;
         private ulong To;
 
-        public ConnectionHandler(TcpClient client)
+        public ConnectionHandlerClient(TcpClient client)
         {
             Client = client;
             Stream = client.GetStream();
@@ -46,7 +46,7 @@ namespace PassCrack.Client
                     {
                         string response = ReceiveMessage();
                         var tmp = response.Split(";").ToList();
-                        var solver = new DictionaryMethodHandler(tmp);
+                        var solver = new DictionaryMethodHandler(tmp, Hash);
                         found=solver.Resolve();
                         break;
                     }
@@ -54,7 +54,7 @@ namespace PassCrack.Client
                     {
                         string response = ReceiveMessage();
                         var tmp = response.Split(";").ToList();
-                        var solver = new BruteForceHandler(ulong.Parse(tmp[0]), ulong.Parse(tmp[1]));
+                        var solver = new BruteForceHandler(ulong.Parse(tmp[0]), ulong.Parse(tmp[1]), Hash);
                         found= solver.Resolve();
                         break;
                     }
@@ -62,13 +62,15 @@ namespace PassCrack.Client
                     Console.WriteLine("Blad metody");
                     break;
             }
-            SendOkMessage();
+            SendOkMessage(found);
             return found;
         }
         void ReceiveMethod()
         {
             string response = ReceiveMessage();
-            Method = int.Parse(response);
+            var tmp = response.Split(";").ToList();
+            Method = int.Parse(tmp[0]);
+            Hash = int.Parse(tmp[1]);
             SendOkMessage();
         }
         void ReceivePasswords()
@@ -85,9 +87,12 @@ namespace PassCrack.Client
             Console.WriteLine("Wysłano: " + message);
         }
 
-        void SendOkMessage()
+        void SendOkMessage(bool found=false)
         {
-            byte[] data = Encoding.ASCII.GetBytes("Ok");
+            var mess = "Ok";
+            if (found)
+                mess = "Found";
+            byte[] data = Encoding.ASCII.GetBytes(mess);
             Stream.Write(data, 0, data.Length);
             Console.WriteLine("Wysłano: " + message);
         }

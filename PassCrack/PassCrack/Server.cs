@@ -1,5 +1,6 @@
 ﻿using System.Net.Sockets;
 using System.Net;
+using System.IO;
 
 namespace PassCrack.Host
 {
@@ -8,11 +9,14 @@ namespace PassCrack.Host
     {
         public int ClientCount;
         public int Method;
+        public int Hash;
         public int Number;
-        public Server(int _ClientCount, int _Method) 
+        List<List<string>> WordList = new List<List<string>>();
+        public Server(int _ClientCount, int _Method, int _Hash) 
         {
             ClientCount = _ClientCount;
             Method = _Method;
+            Hash = _Hash;
         }
 
         public bool Start(List<string> passwords)
@@ -29,14 +33,15 @@ namespace PassCrack.Host
                 GlobalData.SetNumber(0);
                 Console.WriteLine("Serwer uruchomiony. Nasłuchiwanie na porcie 5000...");
                 listener.Start();
+
                 for (int i = 0; i < ClientCount; i++)
-                {
+                {                                                                                  
                     // Akceptuj połączenie od klienta
                     TcpClient client = listener.AcceptTcpClient();
                     Console.WriteLine("Klient połączony!");
 
                     // Tworzenie nowego wątku do obsługi klienta
-                    ConnectionHandler connectionHandler = new ConnectionHandler(client, i, passwords, Method);
+                    ConnectionHandlerHost connectionHandler = new ConnectionHandlerHost(client, i, passwords, Method, Hash, null);
                     Thread clientThread = new Thread(connectionHandler.HandleClient);
                     clientThreads.Add(clientThread);
                     clientThread.Start();

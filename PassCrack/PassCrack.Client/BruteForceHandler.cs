@@ -4,7 +4,7 @@
     {
         public ulong From;
         public ulong To;
-        public BruteForceHandler(ulong from, ulong to) {
+        public BruteForceHandler(ulong from, ulong to, int hash) : base(hash) {
             SetNewSize(from, to);
         }
         public void SetNewSize(ulong from, ulong to)
@@ -22,10 +22,10 @@
                 tmp = DecToString(i);
                 if (tmp.ToString() == "Ala")
                     Console.Write("Sprawdzam {0};", tmp);
-                var hash = CalculateMD5Hash(tmp);
-                if (CheckPasswords(hash))
+                var hashString = HashWord(tmp);
+                if (CheckPasswords(hashString))
                 {
-                    Console.WriteLine("Znaleziono {0} : {1}", tmp, hash);
+                    Console.WriteLine("Znaleziono {0} : {1}", tmp, hashString);
                     return true;
                 }
                 i++;

@@ -4,6 +4,7 @@ class Program
 {
     public int ClientsCount { get; private set; }
     public int Method { get; private set; }
+    public int Hash { get; private set; }
 
     static void Logo()
     {
@@ -47,7 +48,24 @@ class Program
             return false;
         }
         Method = result;
-        Console.WriteLine("Metoda {0}.", Method);
+        Console.WriteLine("1 - hashowanie md5.");
+        Console.WriteLine("2 - hashowanie sha1.");
+        Console.WriteLine("Wpisz nr hashowania:");
+        input = Console.ReadLine();
+        if (input.ToLower() == "exit")
+            return true;
+        if (!int.TryParse(input, out result))
+        {
+            Console.WriteLine("Nie podano liczby.");
+            return false;
+        }
+        if (result != 1 && result != 2)
+        {
+            Console.WriteLine("Nie podano nr hashowania.");
+            return false;
+        }
+        Console.WriteLine("Hashowanie {0}.", Method);
+        Hash = result;
         return true;
     }
     public bool MainLoop()
@@ -71,11 +89,11 @@ class Program
             if (start)
             {
                 start = false;
-                Server server = new Server(ClientsCount, Method);
+                Server server = new (ClientsCount, Method, Hash);
                 var passwords = new List<string>()
                 {
                     "test",
-                    "test2",
+                     "test2",
                     "ala",
                     "lalat",
                 };

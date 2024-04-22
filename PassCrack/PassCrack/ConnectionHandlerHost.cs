@@ -4,21 +4,25 @@ using System.Text;
 
 namespace PassCrack.Host
 {
-    public class ConnectionHandler
+    public class ConnectionHandlerHost
     {
         private TcpClient Client;
         private readonly int ClientNr;
         private readonly List<string> Passwords;
+        private List<string> WordList;
         private int Method;
-        public ConnectionHandler(TcpClient client, int clientNr, List<string> passwords, int method)//1 slownik 2 brute
+        private int Hash;
+        public ConnectionHandlerHost(TcpClient client, int clientNr, List<string> passwords, int method, int hash, List<string> wordList)//method 1 slownik 2 brute
         {
             Client = client;
             ClientNr = clientNr;
-            Passwords = Hash(passwords);
+            Passwords = HashWord(passwords);
             Method = method;
+            Hash = hash;
+            WordList = wordList; //for slownik
         }
 
-        private List<string> Hash(List<string> passwords) 
+        private List<string> HashWord(List<string> passwords) 
         {
             var result = new List<string>();
             foreach(string password in passwords)
@@ -37,7 +41,7 @@ namespace PassCrack.Host
 
                 SendMessage(string.Join(";", Passwords));
                 (isError, received) = ReceiveMessage(Client.GetStream());
-                SendMessage(Method.ToString());
+                SendMessage($"{Method};{Hash}");
                 (isError, received) = ReceiveMessage(Client.GetStream());
                 bool found = false;
 
@@ -55,7 +59,7 @@ namespace PassCrack.Host
                     //globalNr += size;
                     SendMessage($"{number};{size};");
                     (isError, received) = ReceiveMessage(Client.GetStream());
-                    if(received == "found")
+                    if(received == "Found")
                     {
                         found = true;
                         Console.WriteLine("Obsługa klienta {0} {1}.", ClientNr, "znaleziono haslo");

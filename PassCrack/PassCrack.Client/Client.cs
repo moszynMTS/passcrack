@@ -16,7 +16,7 @@ namespace PassCrack.Client
                 Console.WriteLine("Połączono z serwerem.");
 
                 // Utwórz strumienie do komunikacji z serwerem
-                ConnectionHandler connectionHandler = new ConnectionHandler(client);
+                ConnectionHandlerClient connectionHandler = new ConnectionHandlerClient(client);
                 Thread clientThread = new Thread(connectionHandler.HandleClient);
                 clientThread.Start();
                 // Zamknij połączenie

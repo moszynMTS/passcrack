@@ -7,6 +7,11 @@ namespace PassCrack.Client
     {
         public string Keys = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,./;'[]\\-=<>?:\"{}|_+!@#$%^&*() ";
         public List<string> Passwords = new List<string>();
+        public int Hash;
+        public PassCracker(int hash)
+        {
+            Hash = hash;
+        }
         public string DecToString(ulong number)// dodac sprawdzanie od ktorego znaku zaczynac
         {
             string result = "";
@@ -34,6 +39,13 @@ namespace PassCrack.Client
                     return true;
             }
             return false;
+        }
+
+        public string HashWord(string input)
+        {
+            if (Hash == 1)
+                return CalculateMD5Hash(input);
+            return CalculateSHA1Hash(input);
         }
         public static string CalculateSHA1Hash(string input)
         {

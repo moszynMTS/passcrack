@@ -3,7 +3,7 @@
     public class DictionaryMethodHandler : PassCracker
     {
         public List<string> Words = new List<string>();
-        public DictionaryMethodHandler(List<string> words)
+        public DictionaryMethodHandler(List<string> words, int hash): base(hash)
         {
             SetNewSize(words);
         }
@@ -15,16 +15,16 @@
         {
             foreach (string word in Words)
             {
-                var hash = CalculateMD5Hash(word);
-                if(CheckPasswords(hash))
-                    Console.WriteLine("Znaleziono {0} : {1}", word, hash);
+                var hashString = HashWord(word);
+                if(CheckPasswords(hashString))
+                    Console.WriteLine("Znaleziono {0} : {1}", word, hashString);
                 for (ulong i = 0; i < 10000; i++)//ile dodatkowych wariacji słowa sprawdzić
                 {
                     var tmp = DecToString(i);
-                    hash = CalculateMD5Hash(word+tmp);
-                    if (CheckPasswords(hash))
+                    hashString = HashWord(word+tmp);
+                    if (CheckPasswords(hashString))
                     {
-                        Console.WriteLine("Znaleziono {0} : {1}", tmp, hash);
+                        Console.WriteLine("Znaleziono {0} : {1}", tmp, hashString);
                         return true;
                     }
                 }
