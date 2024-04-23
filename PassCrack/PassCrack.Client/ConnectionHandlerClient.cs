@@ -11,6 +11,7 @@ namespace PassCrack.Client
         private List<string> Passwords;
         private int Method;
         private int Hash;
+        private int ClientNr;
         private ulong From;
         private ulong To;
 
@@ -23,9 +24,9 @@ namespace PassCrack.Client
         {
             InitConnection();
             var found = false;
-            for (int i =0; i<100;i++)
+            for (int i = 0; i < 100; i++)
             {
-                found=ReceiveAndSolvePackage();
+                found = ReceiveAndSolvePackage();
             }
             Stream.Close();
             Client.Close();
@@ -35,6 +36,8 @@ namespace PassCrack.Client
         {
             ReceivePasswords();
             ReceiveMethod();
+            if (Method == 1)
+                ReceiveDictionaryFile();
         }
         bool ReceiveAndSolvePackage()
         {
@@ -47,7 +50,7 @@ namespace PassCrack.Client
                         string response = ReceiveMessage();
                         var tmp = response.Split(";").ToList();
                         var solver = new DictionaryMethodHandler(tmp, Hash);
-                        found=solver.Resolve();
+                        found = solver.Resolve();
                         break;
                     }
                 case 2://2 or bruteforce
@@ -55,7 +58,7 @@ namespace PassCrack.Client
                         string response = ReceiveMessage();
                         var tmp = response.Split(";").ToList();
                         var solver = new BruteForceHandler(ulong.Parse(tmp[0]), ulong.Parse(tmp[1]), Hash);
-                        found= solver.Resolve();
+                        found = solver.Resolve();
                         break;
                     }
                 default:
@@ -71,7 +74,31 @@ namespace PassCrack.Client
             var tmp = response.Split(";").ToList();
             Method = int.Parse(tmp[0]);
             Hash = int.Parse(tmp[1]);
+            ClientNr = int.Parse(tmp[2]);
             SendOkMessage();
+        }
+        void ReceiveDictionaryFile()
+        {
+            string filePath = $"{Directory.GetCurrentDirectory()}\\user_{ClientNr}.txt";
+
+            if (File.Exists(filePath))
+            {
+                File.WriteAllText(filePath, string.Empty);
+                Console.WriteLine($"Zawartość pliku {filePath} została wyczyszczona.");
+            }
+
+            using (FileStream fileStream = new FileStream(filePath, FileMode.Append, FileAccess.Write))
+            {
+                string response;
+                while ((response = ReceiveMessage()) != "EOF")
+                {
+                    byte[] data = System.Text.Encoding.UTF8.GetBytes(response);
+
+                    fileStream.Write(data, 0, data.Length);
+                }
+            }
+            SendOkMessage();
+
         }
         void ReceivePasswords()
         {
@@ -87,7 +114,7 @@ namespace PassCrack.Client
             Console.WriteLine("Wysłano: " + message);
         }
 
-        void SendOkMessage(bool found=false)
+        void SendOkMessage(bool found = false)
         {
             var mess = "Ok";
             if (found)

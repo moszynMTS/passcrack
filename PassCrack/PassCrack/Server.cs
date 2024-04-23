@@ -12,7 +12,7 @@ namespace PassCrack.Host
         public int Hash;
         public int Number;
         List<List<string>> WordList = new List<List<string>>();
-        public Server(int _ClientCount, int _Method, int _Hash) 
+        public Server(int _ClientCount, int _Method, int _Hash)
         {
             ClientCount = _ClientCount;
             Method = _Method;
@@ -22,9 +22,9 @@ namespace PassCrack.Host
         public bool Start(List<string> passwords)
         {
             //BruteForce(0,18446744073709551615);
-           /*var time = DateTime.Now;
-            Console.WriteLine((DateTime.Now - time).TotalSeconds);
-            return true;*/
+            /*var time = DateTime.Now;
+             Console.WriteLine((DateTime.Now - time).TotalSeconds);
+             return true;*/
             try
             {
                 TcpListener listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 5000);
@@ -35,13 +35,13 @@ namespace PassCrack.Host
                 listener.Start();
 
                 for (int i = 0; i < ClientCount; i++)
-                {                                                                                  
+                {
                     // Akceptuj połączenie od klienta
                     TcpClient client = listener.AcceptTcpClient();
                     Console.WriteLine("Klient połączony!");
 
                     // Tworzenie nowego wątku do obsługi klienta
-                    ConnectionHandlerHost connectionHandler = new ConnectionHandlerHost(client, i, passwords, Method, Hash, null);
+                    ConnectionHandlerHost connectionHandler = new ConnectionHandlerHost(client, i, ClientCount, passwords, Method, Hash, null);
                     Thread clientThread = new Thread(connectionHandler.HandleClient);
                     clientThreads.Add(clientThread);
                     clientThread.Start();
