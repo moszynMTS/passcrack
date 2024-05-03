@@ -35,6 +35,7 @@ namespace PassCrack.Host
                 // Rozpocznij nasłuchiwanie
                 GlobalData.SetNumber(0);
                 Console.WriteLine($"Serwer uruchomiony. Nasłuchiwanie na porcie {config.Port}...");
+                Console.WriteLine($"Naciśnij P aby pauzować/startować");
                 listener.Start();
 
                 for (int i = 0; i < ClientCount; i++)

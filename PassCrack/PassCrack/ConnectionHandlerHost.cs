@@ -146,7 +146,7 @@ namespace PassCrack.Host
             NetworkStream stream = Client.GetStream();
             byte[] data = Encoding.ASCII.GetBytes(message);
             stream.Write(data, 0, data.Length);
-            Console.WriteLine("Obsługa klienta {0} wysłano {1}", ClientNr, message);
+            //Console.WriteLine("Obsługa klienta {0} wysłano {1}", ClientNr, message);
         }
 
         private (bool, string) ReceiveMessage(NetworkStream stream)//zwraca czy błąd i result

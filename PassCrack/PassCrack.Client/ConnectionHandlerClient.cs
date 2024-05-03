@@ -46,7 +46,6 @@ namespace PassCrack.Client
             string foundedPasswords = "";
             string response = ReceiveMessage();
             var tmp = response.Split(";").ToList();
-            Console.WriteLine(response);
             if (tmp.Count > 0)
                 switch (Method)
                 {

@@ -5,12 +5,14 @@ namespace PassCrack.Client
 {
     public abstract class PassCracker
     {
-        public string Keys = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,./;'[]\\-=<>?:\"{}|_+!@#$%^&*() ";
+        public string Keys;
+        public string FoundedPasswords="";
         public List<string> Passwords = new List<string>();
         public int Hash;
-        public PassCracker(int hash)
+        public PassCracker(int hash, string keys)
         {
             Hash = hash;
+            Keys = keys;
         }
         public string DecToString(ulong number)// dodac sprawdzanie od ktorego znaku zaczynac
         {
@@ -31,12 +33,15 @@ namespace PassCrack.Client
             }
             return result;
         }
-        public bool CheckPasswords(string hash)
+        public bool CheckPasswords(string hash, string word)
         {
             for (int j = 0; j < Passwords.Count; j++)
             {
                 if (hash == Passwords[j])
+                {
+                    FoundedPasswords += $"{word} - {Passwords[j]}";
                     return true;
+                }
             }
             return false;
         }
@@ -83,7 +88,7 @@ namespace PassCrack.Client
             }
         }
 
-        public abstract bool Resolve();
+        public abstract string Resolve();
 
     }
 }
