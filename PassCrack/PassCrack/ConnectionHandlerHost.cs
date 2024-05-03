@@ -10,11 +10,12 @@ namespace PassCrack.Host
         private TcpClient Client;
         private readonly int ClientNr;
         private readonly List<string> Passwords;
+        private readonly string CharacterKeys;
         private List<string> WordList;
         private int Method;
         private int Hash;
         private int ClientCount;
-        public ConnectionHandlerHost(TcpClient client, int clientNr, int clientsCount, List<string> passwords, int method, int hash, List<string> wordList)//method 1 slownik 2 brute
+        public ConnectionHandlerHost(TcpClient client, int clientNr, int clientsCount, List<string> passwords, int method, int hash, List<string> wordList, string characterKeys)//method 1 slownik 2 brute
         {
             Client = client;
             ClientNr = clientNr;
@@ -23,6 +24,7 @@ namespace PassCrack.Host
             Method = method;
             Hash = hash;
             WordList = wordList; //for slownik
+            CharacterKeys = characterKeys;//for bruteforce
         }
 
         private List<string> HashPasswords(List<string> passwords)
@@ -94,7 +96,10 @@ namespace PassCrack.Host
 
         private void SendDictionaryFile()
         {
-            string filePath = "D:\\Program Studia\\Studia\\mgr\\1 rok\\Semestr 1\\Programowanie Systemów Rozproszonych\\Projekt\\PassCrack\\PassCrack\\wordlist.txt";
+            string fileName = "wordlist.txt";
+            string currentDirectory = Directory.GetCurrentDirectory();
+            string sourceDirectory = Directory.GetParent(currentDirectory)?.Parent?.Parent?.FullName;
+            string filePath = Path.Combine(sourceDirectory, fileName);
             if (File.Exists(filePath))
             {
                 Console.WriteLine("ZNALEZIONI PLIK");

@@ -4,15 +4,15 @@ namespace PassCrack.Client
 {
     internal class Client
     {
-
+        public string IP = "127.0.0.1"; //needs to be the same as config.json on host
+        public int Port = 5000;
         public Client() { }
 
         public void Start()
         {
             try
             {
-                // Połącz się z serwerem na porcie 5000 na localhost
-                TcpClient client = new TcpClient("127.0.0.1", 5000);
+                TcpClient client = new TcpClient(IP, Port);
                 Console.WriteLine("Połączono z serwerem.");
 
                 // Utwórz strumienie do komunikacji z serwerem

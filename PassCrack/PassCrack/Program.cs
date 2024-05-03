@@ -1,10 +1,9 @@
-﻿using PassCrack.Host;
+﻿using Newtonsoft.Json;
+using PassCrack.Host;
 
 class Program
 {
-    public int ClientsCount { get; private set; }
-    public int Method { get; private set; }
-    public int Hash { get; private set; }
+    public ConfigEntity ConfigEntity;
 
     static void Logo()
     {
@@ -15,9 +14,10 @@ class Program
         Console.WriteLine("*    /_/   /_/  |_/____/____/\\____/\\____/_/ |_/_/  |_\\____/_/ |_|  ");
         Console.WriteLine("");
     }
-    public bool Config()
+    public bool Config() //used when config.json isnt used
     {
         Console.WriteLine("Wpisz ilość klientów.");
+        ConfigEntity = new ConfigEntity();
         string input = Console.ReadLine();
         if (input.ToLower() == "exit")
             return true;
@@ -28,9 +28,9 @@ class Program
         }
         else
         {
-            ClientsCount = result;
+            ConfigEntity.ClientsCount = result;
         }
-        Console.WriteLine("Ilość klientów {0}.", ClientsCount);
+        Console.WriteLine("Ilość klientów {0}.", ConfigEntity.ClientsCount);
         Console.WriteLine("1 - metoda słownikowa.");
         Console.WriteLine("2 - metoda brute force.");
         Console.WriteLine("Wpisz nr metody:");
@@ -47,7 +47,7 @@ class Program
             Console.WriteLine("Nie podano nr metody.");
             return false;
         }
-        Method = result;
+        ConfigEntity.Method = result;
         Console.WriteLine("1 - hashowanie md5.");
         Console.WriteLine("2 - hashowanie sha1.");
         Console.WriteLine("Wpisz nr hashowania:");
@@ -64,14 +64,13 @@ class Program
             Console.WriteLine("Nie podano nr hashowania.");
             return false;
         }
-        Console.WriteLine("Hashowanie {0}.", Method);
-        Hash = result;
+        Console.WriteLine("Hashowanie {0}.", ConfigEntity.Method);
         return true;
     }
     public bool MainLoop()
     {
         string input;
-        bool config = true;
+        bool config = true; //false - load from file, true - let user write
         bool start = true;
         bool end = false;
 
@@ -86,10 +85,14 @@ class Program
                 else
                     config = false;
             }
+            else
+            {
+                ConfigFromFile();
+            }
             if (start)
             {
                 start = false;
-                Server server = new (ClientsCount, Method, Hash);
+                Server server = new (ConfigEntity.ClientsCount, ConfigEntity.Method, ConfigEntity.Hash, ConfigEntity.CharacterKeys);
                 var passwords = new List<string>()
                 {
                     "test",
@@ -97,7 +100,7 @@ class Program
                     "ala",
                     "lalat",
                 };
-                server.Start(passwords);
+                server.Start(passwords, ConfigEntity);
                 end = true;
             }
         }
@@ -107,5 +110,25 @@ class Program
     {
         Program program = new Program();
         program.MainLoop();
+    }
+    public void ConfigFromFile()
+    {
+        string fileName = "config.json";
+        string currentDirectory = Directory.GetCurrentDirectory();
+        string sourceDirectory = Directory.GetParent(currentDirectory)?.Parent?.Parent?.FullName;
+        string filePath = Path.Combine(sourceDirectory, fileName);
+        if (!File.Exists(filePath))
+        {
+            Console.WriteLine("Plik konfiguracyjny nie istnieje.");
+            return;
+        } else
+        {
+            string jsonConfig = File.ReadAllText(filePath);
+            var configFile = JsonConvert.DeserializeObject<ConfigEntity>(jsonConfig);
+            if(configFile != null)
+            {
+                ConfigEntity = configFile;
+            }
+        }
     }
 }

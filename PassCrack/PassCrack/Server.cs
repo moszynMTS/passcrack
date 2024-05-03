@@ -1,6 +1,7 @@
 ﻿using System.Net.Sockets;
 using System.Net;
 using System.IO;
+using static Program;
 
 namespace PassCrack.Host
 {
@@ -11,15 +12,17 @@ namespace PassCrack.Host
         public int Method;
         public int Hash;
         public int Number;
+        public string CharacterKeys;
         List<List<string>> WordList = new List<List<string>>();
-        public Server(int _ClientCount, int _Method, int _Hash)
+        public Server(int _ClientCount, int _Method, int _Hash, string _CharacterKeys)
         {
             ClientCount = _ClientCount;
             Method = _Method;
             Hash = _Hash;
+            CharacterKeys = _CharacterKeys;
         }
 
-        public bool Start(List<string> passwords)
+        public bool Start(List<string> passwords, ConfigEntity config)
         {
             //BruteForce(0,18446744073709551615);
             /*var time = DateTime.Now;
@@ -27,11 +30,11 @@ namespace PassCrack.Host
              return true;*/
             try
             {
-                TcpListener listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 5000);
+                TcpListener listener = new TcpListener(IPAddress.Parse(config.IP), config.Port);
                 List<Thread> clientThreads = new List<Thread>();
                 // Rozpocznij nasłuchiwanie
                 GlobalData.SetNumber(0);
-                Console.WriteLine("Serwer uruchomiony. Nasłuchiwanie na porcie 5000...");
+                Console.WriteLine($"Serwer uruchomiony. Nasłuchiwanie na porcie {config.Port}...");
                 listener.Start();
 
                 for (int i = 0; i < ClientCount; i++)
@@ -41,7 +44,7 @@ namespace PassCrack.Host
                     Console.WriteLine("Klient połączony!");
 
                     // Tworzenie nowego wątku do obsługi klienta
-                    ConnectionHandlerHost connectionHandler = new ConnectionHandlerHost(client, i, ClientCount, passwords, Method, Hash, null);
+                    ConnectionHandlerHost connectionHandler = new ConnectionHandlerHost(client, i, config.ClientsCount, passwords, config.Method, config.Hash, null, config.CharacterKeys);
                     Thread clientThread = new Thread(connectionHandler.HandleClient);
                     clientThreads.Add(clientThread);
                     clientThread.Start();
@@ -63,4 +66,5 @@ namespace PassCrack.Host
             }
         }
     }
+
 }

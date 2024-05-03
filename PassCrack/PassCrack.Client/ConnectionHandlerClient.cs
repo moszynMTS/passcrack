@@ -9,6 +9,7 @@ namespace PassCrack.Client
         private TcpClient Client;
         private string message = "";
         private List<string> Passwords;
+        public string CharacterKeys; //todo
         private int Method;
         private int Hash;
         private int ClientNr;
@@ -75,6 +76,7 @@ namespace PassCrack.Client
             Method = int.Parse(tmp[0]);
             Hash = int.Parse(tmp[1]);
             ClientNr = int.Parse(tmp[2]);
+            CharacterKeys = tmp[3]; //for custom keys 
             SendOkMessage();
         }
         void ReceiveDictionaryFile()
