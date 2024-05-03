@@ -43,31 +43,31 @@ namespace PassCrack.Client
         bool ReceiveAndSolvePackage()
         {
             var mess = "";
-            var found = false;
-            switch (Method)
-            {
-                case 1: //slownik
-                    {
-                        string response = ReceiveMessage();
-                        var tmp = response.Split(";").ToList();
-                        var solver = new DictionaryMethodHandler(tmp, Hash);
-                        found = solver.Resolve();
+            string foundedPasswords = "";
+            string response = ReceiveMessage();
+            var tmp = response.Split(";").ToList();
+            Console.WriteLine(response);
+            if (tmp.Count > 0)
+                switch (Method)
+                {
+                    case 1: //slownik
+                        {
+                            var solver = new DictionaryMethodHandler(tmp, Hash, CharacterKeys);
+                            foundedPasswords = solver.Resolve();
+                            break;
+                        }
+                    case 2://2 or bruteforce
+                        {
+                            var solver = new BruteForceHandler(ulong.Parse(tmp[0]), ulong.Parse(tmp[1]), Hash, CharacterKeys);
+                            foundedPasswords = solver.Resolve();
+                            break;
+                        }
+                    default:
+                        Console.WriteLine("Blad metody");
                         break;
-                    }
-                case 2://2 or bruteforce
-                    {
-                        string response = ReceiveMessage();
-                        var tmp = response.Split(";").ToList();
-                        var solver = new BruteForceHandler(ulong.Parse(tmp[0]), ulong.Parse(tmp[1]), Hash);
-                        found = solver.Resolve();
-                        break;
-                    }
-                default:
-                    Console.WriteLine("Blad metody");
-                    break;
-            }
-            SendOkMessage(found);
-            return found;
+                }
+            SendOkMessage(foundedPasswords!="", foundedPasswords);
+            return foundedPasswords != "";
         }
         void ReceiveMethod()
         {
@@ -113,17 +113,15 @@ namespace PassCrack.Client
         {
             byte[] data = Encoding.ASCII.GetBytes(message);
             Stream.Write(data, 0, data.Length);
-            Console.WriteLine("Wysłano: " + message);
         }
 
-        void SendOkMessage(bool found = false)
+        void SendOkMessage(bool found = false, string foundedPasswords="")
         {
             var mess = "Ok";
             if (found)
-                mess = "Found";
+                mess = "found;"+foundedPasswords;
             byte[] data = Encoding.ASCII.GetBytes(mess);
             Stream.Write(data, 0, data.Length);
-            Console.WriteLine("Wysłano: " + message);
         }
 
         void SendErrorMessage()

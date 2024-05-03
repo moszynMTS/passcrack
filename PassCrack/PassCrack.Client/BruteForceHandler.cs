@@ -4,7 +4,7 @@
     {
         public ulong From;
         public ulong To;
-        public BruteForceHandler(ulong from, ulong to, int hash) : base(hash) {
+        public BruteForceHandler(ulong from, ulong to, int hash, string keys) : base(hash, keys) {
             SetNewSize(from, to);
         }
         public void SetNewSize(ulong from, ulong to)
@@ -12,26 +12,21 @@
             From = from;
             To = from+to;
         }
-        public override bool Resolve()
+        public override string Resolve()
         {
-            Console.WriteLine("Szukam od {0} przez {1}", From, To);
             ulong i = From;
             var tmp = "";
             while (i < To)
             {
                 tmp = DecToString(i);
-                if (tmp.ToString() == "Ala")
-                    Console.Write("Sprawdzam {0};", tmp);
                 var hashString = HashWord(tmp);
-                if (CheckPasswords(hashString))
+                if (CheckPasswords(hashString,tmp))
                 {
                     Console.WriteLine("Znaleziono {0} : {1}", tmp, hashString);
-                    return true;
                 }
                 i++;
             }
-            Console.WriteLine("Ostatni {0}", tmp);
-            return false;
+            return FoundedPasswords;
         }
     }
 }

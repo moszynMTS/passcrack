@@ -15,6 +15,10 @@ namespace PassCrack.Host
         private int Method;
         private int Hash;
         private int ClientCount;
+        static bool Stop = false;
+        static bool Pause = false;
+
+        static ManualResetEvent pauseEvent = new ManualResetEvent(true);
         public ConnectionHandlerHost(TcpClient client, int clientNr, int clientsCount, List<string> passwords, int method, int hash, List<string> wordList, string characterKeys)//method 1 slownik 2 brute
         {
             Client = client;
@@ -49,7 +53,7 @@ namespace PassCrack.Host
 
                 SendMessage(string.Join(";", Passwords));
                 (isError, received) = ReceiveMessage(Client.GetStream());
-                SendMessage($"{Method};{Hash};{ClientNr}");
+                SendMessage($"{Method};{Hash};{ClientNr};{CharacterKeys}");
                 (isError, received) = ReceiveMessage(Client.GetStream());
 
                 if (Method == 1)
@@ -60,28 +64,29 @@ namespace PassCrack.Host
 
                 bool found = false;
 
+                // - key event for stop client
+                Thread keyListenerThread = new Thread(ReadKey);
+                keyListenerThread.Start();
+
                 object sonThread = new object();
                 int number = 0;
                 int size = 20000;
-                while (!found)
+                while (!Stop)//wszytkie hasla nie znalezie
                 {
+                    //if (Pause)
+                        pauseEvent.WaitOne();
                     lock (sonThread)
                     {
                         number = GlobalData.GetNumber();
                         GlobalData.SetNumber(number + size);
-                        //number += size;// tutaj jakos trzeba synchronizowac wszystkie wątki tak, aby ten number był zawsze ostatni sprawdzany
                     }
-                    //globalNr += size;
-                    SendMessage($"{number};{size};");
+                    SendMessage($"{number};{size}");
                     (isError, received) = ReceiveMessage(Client.GetStream());
-                    if (received == "Found")
-                    {
-                        found = true;
-                        Console.WriteLine("Obsługa klienta {0} {1}.", ClientNr, "znaleziono haslo");
-                    }
-                    else
-                        Console.WriteLine("Obsługa klienta {0} {1}.", ClientNr, "wysylanie kolejnej paczki");
+ 
+                     //Console.WriteLine("Obsługa klienta {0} {1}.", ClientNr, "wysylanie kolejnej paczki");
                 }
+
+                keyListenerThread.Join();
                 Console.WriteLine("Obsługa klienta {0} zakończona.", ClientNr);
             }
             catch (Exception ex)
@@ -149,7 +154,12 @@ namespace PassCrack.Host
             byte[] buffer = new byte[1024];
             int bytesRead = stream.Read(buffer, 0, buffer.Length);
             var result = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-            Console.WriteLine("Obsługa klienta {0} odebrano {1}.", ClientNr, result);
+            if (result.StartsWith("found;"))
+            {
+                Console.WriteLine("Obsługa klienta {0} znaleziono hasłą {1}.", ClientNr, result.Substring(6));
+                Console.WriteLine("--------------------------------------------------------");
+            }
+            //Console.WriteLine("Obsługa klienta {0} odebrano {1}.", ClientNr, result);
             if (result != "Error")
                 return (false, result);
             return (true, result);
@@ -186,6 +196,30 @@ namespace PassCrack.Host
                     sb.Append(hashBytes[i].ToString("x2"));
                 }
                 return sb.ToString();
+            }
+        }
+        public static void ReadKey()
+        {
+            while (true)
+            {
+                if (Console.ReadKey(true).Key == ConsoleKey.P)
+                {
+                    //Pause = !Pause;
+                    //if (!Pause)
+                    //{
+                    //    pauseEvent.Dispose();
+                    //}
+                    if (pauseEvent.WaitOne(0))
+                    {
+                        Console.WriteLine("PAUZA");
+                        pauseEvent.Reset();
+                    }
+                    else
+                    {
+                        Console.WriteLine("START");
+                        pauseEvent.Set();
+                    }
+                }
             }
         }
     }

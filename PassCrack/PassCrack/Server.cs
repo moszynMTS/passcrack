@@ -49,6 +49,8 @@ namespace PassCrack.Host
                     clientThreads.Add(clientThread);
                     clientThread.Start();
                 }
+
+
                 foreach (Thread thread in clientThreads)
                 {
                     thread.Join();

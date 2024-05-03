@@ -70,7 +70,7 @@ class Program
     public bool MainLoop()
     {
         string input;
-        bool config = true; //false - load from file, true - let user write
+        bool config = false; //false - load from file, true - let user write
         bool start = true;
         bool end = false;
 
