@@ -45,7 +45,8 @@ namespace PassCrack.Host
                     Console.WriteLine("Klient połączony!");
 
                     // Tworzenie nowego wątku do obsługi klienta
-                    ConnectionHandlerHost connectionHandler = new ConnectionHandlerHost(client, i, config.ClientsCount, passwords, config.Method, config.Hash, null, config.CharacterKeys);
+                    ConnectionHandlerHost connectionHandler = new ConnectionHandlerHost(client, i, config.ClientsCount,
+                        passwords, config.Method, config.Hash, null, config.CharacterKeys, config.PackageSize);
                     Thread clientThread = new Thread(connectionHandler.HandleClient);
                     clientThreads.Add(clientThread);
                     clientThread.Start();

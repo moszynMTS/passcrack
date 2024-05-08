@@ -4,7 +4,8 @@
     {
         public ulong From;
         public ulong To;
-        public BruteForceHandler(ulong from, ulong to, int hash, string keys) : base(hash, keys) {
+        public BruteForceHandler(ulong from, ulong to, int hash, string keys, List<string> passwords) : base(hash, keys, passwords)
+        {
             SetNewSize(from, to);
         }
         public void SetNewSize(ulong from, ulong to)

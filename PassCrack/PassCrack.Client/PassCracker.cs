@@ -9,10 +9,11 @@ namespace PassCrack.Client
         public string FoundedPasswords="";
         public List<string> Passwords = new List<string>();
         public int Hash;
-        public PassCracker(int hash, string keys)
+        public PassCracker(int hash, string keys, List<string> passwords)
         {
             Hash = hash;
             Keys = keys;
+            Passwords = passwords;
         }
         public string DecToString(ulong number)// dodac sprawdzanie od ktorego znaku zaczynac
         {
@@ -39,7 +40,7 @@ namespace PassCrack.Client
             {
                 if (hash == Passwords[j])
                 {
-                    FoundedPasswords += $"{word} - {Passwords[j]}";
+                    FoundedPasswords += $"{word} - {Passwords[j]}\n";
                     return true;
                 }
             }

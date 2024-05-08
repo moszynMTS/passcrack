@@ -1,9 +1,10 @@
 {
-  "IP": "127.0.0.1",      // IP
-  "Port": 5000,           // Port
-  "ClientsCount": 1,     // Liczba klientów
-  "Method": 2,            // Metoda 1 - słownikowa, 2-bruteforce
-  "Hash": 1,              // Hash 1-MD5, 2-SHA1
-  "WordListPath": "",      // Niestandardowy slownik
-  "CharacterKeys": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,./;'[]\\-=<>?:\"{}|_+!@#$%^&*() " //Sprawdzane ciagi znakow w bruteforce
+  "IP": "127.0.0.1", // IP
+  "Port": 5000, // Port
+  "ClientsCount": 3, // Liczba klientów
+  "Method": 2, // Metoda 1 - słownikowa, 2-bruteforce
+  "Hash": 1, // Hash 1-MD5, 2-SHA1
+  "WordListPath": "", // Niestandardowy slownik
+  "CharacterKeys": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,./;'[]\\-=<>?:\"{}|_+!@#$%^&*() ", //Sprawdzane ciagi znakow w bruteforce
+  "PackageSize": 1000
 }

@@ -15,20 +15,24 @@ namespace PassCrack.Host
         private int Method;
         private int Hash;
         private int ClientCount;
+        private int PackageSize;
         static bool Stop = false;
         static bool Pause = false;
 
         static ManualResetEvent pauseEvent = new ManualResetEvent(true);
-        public ConnectionHandlerHost(TcpClient client, int clientNr, int clientsCount, List<string> passwords, int method, int hash, List<string> wordList, string characterKeys)//method 1 slownik 2 brute
+        public ConnectionHandlerHost(TcpClient client, int clientNr, int clientsCount,
+            List<string> passwords, int method, int hash, List<string> wordList,
+            string characterKeys, int packageSize)//method 1 slownik 2 brute
         {
             Client = client;
             ClientNr = clientNr;
             ClientCount = clientsCount;
+            Hash = hash;
             Passwords = HashPasswords(passwords);
             Method = method;
-            Hash = hash;
             WordList = wordList; //for slownik
             CharacterKeys = characterKeys;//for bruteforce
+            PackageSize = packageSize;//for bruteforce
         }
 
         private List<string> HashPasswords(List<string> passwords)
@@ -70,7 +74,7 @@ namespace PassCrack.Host
 
                 object sonThread = new object();
                 int number = 0;
-                int size = 20000;
+                int size = PackageSize;
                 while (!Stop)//wszytkie hasla nie znalezie
                 {
                     //if (Pause)

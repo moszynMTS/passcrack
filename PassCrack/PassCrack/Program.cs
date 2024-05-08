@@ -95,7 +95,7 @@ class Program
                 Server server = new (ConfigEntity.ClientsCount, ConfigEntity.Method, ConfigEntity.Hash, ConfigEntity.CharacterKeys);
                 var passwords = new List<string>()
                 {
-                    "test",
+                    "a",
                     "test2",
                     "ala",
                     "lalat",

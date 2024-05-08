@@ -3,7 +3,7 @@
     public class DictionaryMethodHandler : PassCracker
     {
         public List<string> Words = new List<string>();
-        public DictionaryMethodHandler(List<string> words, int hash, string keys) : base(hash, keys)
+        public DictionaryMethodHandler(List<string> words, int hash, string keys, List<string> passwords) : base(hash, keys, passwords)
         {
             SetNewSize(words);
         }

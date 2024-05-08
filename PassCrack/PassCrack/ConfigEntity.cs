@@ -15,5 +15,6 @@ namespace PassCrack.Host
         public int Port { get; set; } = 5000;
         public string WordListPath { get; set; }
         public string CharacterKeys { get; set; } = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,./;'[]\\-=<>?:\"{}|_+!@#$%^&*() ";
+        public int PackageSize { get; set; } = 2000;
     }
 }

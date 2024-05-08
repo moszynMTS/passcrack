@@ -13,8 +13,6 @@ namespace PassCrack.Client
         private int Method;
         private int Hash;
         private int ClientNr;
-        private ulong From;
-        private ulong To;
 
         public ConnectionHandlerClient(TcpClient client)
         {
@@ -25,7 +23,7 @@ namespace PassCrack.Client
         {
             InitConnection();
             var found = false;
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 2000; i++)
             {
                 found = ReceiveAndSolvePackage();
             }
@@ -42,7 +40,6 @@ namespace PassCrack.Client
         }
         bool ReceiveAndSolvePackage()
         {
-            var mess = "";
             string foundedPasswords = "";
             string response = ReceiveMessage();
             var tmp = response.Split(";").ToList();
@@ -51,13 +48,13 @@ namespace PassCrack.Client
                 {
                     case 1: //slownik
                         {
-                            var solver = new DictionaryMethodHandler(tmp, Hash, CharacterKeys);
+                            var solver = new DictionaryMethodHandler(tmp, Hash, CharacterKeys, Passwords);
                             foundedPasswords = solver.Resolve();
                             break;
                         }
                     case 2://2 or bruteforce
                         {
-                            var solver = new BruteForceHandler(ulong.Parse(tmp[0]), ulong.Parse(tmp[1]), Hash, CharacterKeys);
+                            var solver = new BruteForceHandler(ulong.Parse(tmp[0]), ulong.Parse(tmp[1]), Hash, CharacterKeys, Passwords);
                             foundedPasswords = solver.Resolve();
                             break;
                         }
