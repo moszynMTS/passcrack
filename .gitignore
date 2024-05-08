@@ -4,3 +4,7 @@ PassCrack/PassCrack/obj/
 PassCrack/PassCrack.Client/obj/
 *.zip
 *.dll
+PassCrack/PassCrack.Client/bin/Debug/net6.0/PassCrack.Client.deps.json
+PassCrack/PassCrack.Client/bin/Debug/net6.0/PassCrack.Client.pdb
+PassCrack/PassCrack.Client/bin/Debug/net6.0/PassCrack.Host.deps.json
+PassCrack/PassCrack.Client/bin/Debug/net6.0/PassCrack.Host.pdb
