@@ -13,7 +13,6 @@ namespace PassCrack.Host
         public int Hash { get; set; } = 1;
         public string IP { get; set; } = "127.0.0.1";
         public int Port { get; set; } = 5000;
-        public string WordListPath { get; set; }
         public string CharacterKeys { get; set; } = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,./;'[]\\-=<>?:\"{}|_+!@#$%^&*() ";
         public int PackageSize { get; set; } = 2000;
     }

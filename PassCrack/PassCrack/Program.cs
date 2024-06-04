@@ -93,13 +93,7 @@ class Program
             {
                 start = false;
                 Server server = new (ConfigEntity.ClientsCount, ConfigEntity.Method, ConfigEntity.Hash, ConfigEntity.CharacterKeys);
-                var passwords = new List<string>()
-                {
-                    "a",
-                    "test2",
-                    "ala",
-                    "lalat",
-                };
+                var passwords = PasswordsFromFile();
                 server.Start(passwords, ConfigEntity);
                 end = true;
             }
@@ -131,4 +125,27 @@ class Program
             }
         }
     }
+    public List<string> PasswordsFromFile()
+    {
+        var passwords = new List<string>();
+        string fileName = "searched.txt";
+        string currentDirectory = Directory.GetCurrentDirectory();
+        string sourceDirectory = Directory.GetParent(currentDirectory)?.Parent?.Parent?.FullName;
+        string filePath = Path.Combine(sourceDirectory, fileName);
+        if (!File.Exists(filePath))
+        {
+            Console.WriteLine("Plik z szukanymi hasłami nie istnieje.");
+            return passwords;
+        }
+        else
+        {
+            string[] fileLines = File.ReadAllLines(filePath);
+            foreach (string line in fileLines)
+            {
+                passwords.Add(line);
+            }
+        }
+        return passwords;
+    }
+
 }
