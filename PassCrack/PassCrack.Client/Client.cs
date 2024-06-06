@@ -4,7 +4,7 @@ namespace PassCrack.Client
 {
     internal class Client
     {
-        public string IP = "127.0.0.1"; //needs to be the same as config.json on host
+        public string IP = "127.0.0.1"; //"https://1343-78-8-220-236.ngrok-free.app/" needs to be the same as config.json on host
         public int Port = 5000;
         public Client() { }
 

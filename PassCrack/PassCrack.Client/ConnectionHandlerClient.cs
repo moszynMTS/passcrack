@@ -1,4 +1,6 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Diagnostics;
+using System.Net.Sockets;
 using System.Text;
 
 namespace PassCrack.Client
@@ -13,7 +15,7 @@ namespace PassCrack.Client
         private int Method;
         private int Hash;
         private int ClientNr;
-
+        string logPath = "D:\\studia\\magisterka\\sem1\\passCrack\\PassCrack\\PassCrack.Client\\log.txt";
         public ConnectionHandlerClient(TcpClient client)
         {
             Client = client;
@@ -43,6 +45,8 @@ namespace PassCrack.Client
             string foundedPasswords = "";
             string response = ReceiveMessage();
             var tmp = response.Split(";").ToList();
+            ulong size = 0;
+            Stopwatch stopwatch = Stopwatch.StartNew();
             if (tmp.Count > 0)
                 switch (Method)
                 {
@@ -50,18 +54,29 @@ namespace PassCrack.Client
                         {
                             var solver = new DictionaryMethodHandler(tmp, Hash, CharacterKeys, Passwords);
                             foundedPasswords = solver.Resolve();
+                            size = (ulong)(tmp.Count * 10000);
                             break;
                         }
                     case 2://2 or bruteforce
                         {
                             var solver = new BruteForceHandler(ulong.Parse(tmp[0]), ulong.Parse(tmp[1]), Hash, CharacterKeys, Passwords);
                             foundedPasswords = solver.Resolve();
+                            size = ulong.Parse(tmp[1])- ulong.Parse(tmp[0]);
                             break;
                         }
                     default:
                         Console.WriteLine("Blad metody");
                         break;
                 }
+
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            string elapsedTime = String.Format("{0:00}.{1:000}", ts.Seconds, ts.Milliseconds);
+            // Log the elapsed time to log.txt
+            File.AppendAllText(logPath, $"Resolve: {elapsedTime} seconds\n");
+            double elapsedTimeInSeconds = ts.TotalSeconds;
+            double wordsPerSecond = size / elapsedTimeInSeconds;
+            File.AppendAllText(logPath, $"Words/Sec: {wordsPerSecond:F2} words/second\n");
             SendOkMessage(foundedPasswords!="", foundedPasswords);
             return foundedPasswords != "";
         }
@@ -107,17 +122,29 @@ namespace PassCrack.Client
         }
         void SendMessage(string message)
         {
+            Stopwatch stopwatch = Stopwatch.StartNew();
             byte[] data = Encoding.ASCII.GetBytes(message);
             Stream.Write(data, 0, data.Length);
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            string elapsedTime = String.Format("{0:00}.{1:000}", ts.Seconds, ts.Milliseconds);
+            // Log the elapsed time to log.txt
+            File.AppendAllText(logPath, $"Send Message: {elapsedTime} seconds\n");
         }
 
         void SendOkMessage(bool found = false, string foundedPasswords="")
         {
+            Stopwatch stopwatch = Stopwatch.StartNew();
             var mess = "Ok";
             if (found)
                 mess = "found;"+foundedPasswords;
             byte[] data = Encoding.ASCII.GetBytes(mess);
             Stream.Write(data, 0, data.Length);
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            string elapsedTime = String.Format("{0:00}.{1:000}", ts.Seconds, ts.Milliseconds);
+            // Log the elapsed time to log.txt
+            File.AppendAllText(logPath, $"Send Ok Message: {elapsedTime} seconds\n");
         }
 
         void SendErrorMessage()
@@ -129,8 +156,14 @@ namespace PassCrack.Client
 
         string ReceiveMessage()
         {
+            Stopwatch stopwatch = Stopwatch.StartNew();
             byte[] buffer = new byte[1024];
             int bytesRead = Stream.Read(buffer, 0, buffer.Length);
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            string elapsedTime = String.Format("{0:00}.{1:000}", ts.Seconds, ts.Milliseconds);
+            // Log the elapsed time to log.txt
+            File.AppendAllText(logPath, $"Receive Message: {elapsedTime} seconds\n");
             return Encoding.ASCII.GetString(buffer, 0, bytesRead);
         }
     }

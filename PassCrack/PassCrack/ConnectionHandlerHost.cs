@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
@@ -18,6 +19,7 @@ namespace PassCrack.Host
         private int PackageSize;
         static bool Stop = false;
         static bool Pause = false;
+        string logPath = "D:\\studia\\magisterka\\sem1\\passCrack\\PassCrack\\PassCrack\\log.txt";
 
         static ManualResetEvent pauseEvent = new ManualResetEvent(true);
         public ConnectionHandlerHost(TcpClient client, int clientNr, int clientsCount,
@@ -147,14 +149,21 @@ namespace PassCrack.Host
 
         private void SendMessage(string message)
         {
+            Stopwatch stopwatch = Stopwatch.StartNew();
             NetworkStream stream = Client.GetStream();
             byte[] data = Encoding.ASCII.GetBytes(message);
             stream.Write(data, 0, data.Length);
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            string elapsedTime = String.Format("{0:00}.{1:000}", ts.Seconds, ts.Milliseconds);
+            // Log the elapsed time to log.txt
+            File.AppendAllText(logPath, $"Send Message: {elapsedTime} seconds\n");
             //Console.WriteLine("Obsługa klienta {0} wysłano {1}", ClientNr, message);
         }
 
         private (bool, string) ReceiveMessage(NetworkStream stream)//zwraca czy błąd i result
         {
+            Stopwatch stopwatch = Stopwatch.StartNew();
             byte[] buffer = new byte[1024];
             int bytesRead = stream.Read(buffer, 0, buffer.Length);
             var result = Encoding.ASCII.GetString(buffer, 0, bytesRead);
@@ -164,6 +173,11 @@ namespace PassCrack.Host
                 Console.WriteLine("--------------------------------------------------------");
             }
             //Console.WriteLine("Obsługa klienta {0} odebrano {1}.", ClientNr, result);
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            string elapsedTime = String.Format("{0:00}.{1:000}", ts.Seconds, ts.Milliseconds);
+            // Log the elapsed time to log.txt
+            File.AppendAllText(logPath, $"Receive Message: {elapsedTime} seconds\n");
             if (result != "Error")
                 return (false, result);
             return (true, result);
