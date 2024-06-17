@@ -61,7 +61,7 @@ namespace PassCrack.Client
                         {
                             var solver = new BruteForceHandler(ulong.Parse(tmp[0]), ulong.Parse(tmp[1]), Hash, CharacterKeys, Passwords);
                             foundedPasswords = solver.Resolve();
-                            size = ulong.Parse(tmp[1])- ulong.Parse(tmp[0]);
+                            size = ulong.Parse(tmp[1]);
                             break;
                         }
                     default:

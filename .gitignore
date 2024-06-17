@@ -8,3 +8,7 @@ PassCrack/PassCrack.Client/bin/Debug/net6.0/PassCrack.Client.deps.json
 PassCrack/PassCrack.Client/bin/Debug/net6.0/PassCrack.Client.pdb
 PassCrack/PassCrack.Client/bin/Debug/net6.0/PassCrack.Host.deps.json
 PassCrack/PassCrack.Client/bin/Debug/net6.0/PassCrack.Host.pdb
+/PassCrack/PassCrack.Client/bin/Release/net6.0/win-x86
+/PassCrack/PassCrack/bin/Release/net6.0/win-x86
+/PassCrack/PassCrack/Properties/PublishProfiles
+/PassCrack/PassCrack.Client/Properties/PublishProfiles
